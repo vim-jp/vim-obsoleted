@@ -1666,7 +1666,7 @@ PRO_MANUAL = os_amiga.pro os_msdos.pro os_win16.pro os_win32.pro \
 	os_mswin.pro winclip.pro os_beos.pro os_vms.pro $(PERL_PRO)
 
 # Default target is making the executable and tools
-all: $(VIMTARGET) $(TOOLS) languages $(GUI_BUNDLE)
+all: $(VIMTARGET) $(TOOLS) languages $(GUI_BUNDLE) outdatedagain
 
 tools: $(TOOLS)
 
@@ -1683,6 +1683,13 @@ tools: $(TOOLS)
 # are very hard to figure out.
 #
 config auto/config.mk: auto/configure config.mk.in config.h.in
+	@echo
+	@echo ====================================
+	@echo YOU ARE BUILDING AN OUTDATED VERSION
+	@echo ====================================
+	@echo The Vim repository on Google code is no longer being used.
+	@echo See http://www.vim.org/movetogithub.php
+	@echo
 	-rm -f auto/config.cache
 	if test "X$(MAKECMDGOALS)" != "Xclean" \
 		-a "X$(MAKECMDGOALS)" != "Xdistclean" \
@@ -1749,10 +1756,23 @@ myself:
 # The normal command to compile a .c file to its .o file.
 CCC = $(CC) -c -I$(srcdir) $(ALL_CFLAGS)
 
+# If you see this, you have synced your repository from the old Google code
+# site.  Google code is shutting down, the official Vim repository has moved
+# to github: https://github.com/vim/vim
+# Visit the Vim website for help and alternatives:
+# http://www.vim.org/movetogithub.php
+outdatedrepo outdatedagain:
+	@echo
+	@echo ====================================
+	@echo YOU ARE BUILDING AN OUTDATED VERSION
+	@echo ====================================
+	@echo The Vim repository on Google code is no longer being used.
+	@echo See http://www.vim.org/movetogithub.php
+	@echo
 
 # Link the target for normal use or debugging.
 # A shell script is used to try linking without unnecessary libraries.
-$(VIMTARGET): auto/config.mk objects $(OBJ) version.c version.h
+$(VIMTARGET): outdatedrepo auto/config.mk objects $(OBJ) version.c version.h
 	$(CCC) version.c -o objects/version.o
 	@LINK="$(PURIFY) $(SHRPENV) $(CClink) $(ALL_LIB_DIRS) $(LDFLAGS) \
 		-o $(VIMTARGET) $(OBJ) $(ALL_LIBS)" \
